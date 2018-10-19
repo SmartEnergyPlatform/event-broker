@@ -1,0 +1,1 @@
+provides filters (rules) for event-filter-pools and a http-api for crud on these filters

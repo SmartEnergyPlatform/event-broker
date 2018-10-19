@@ -1,0 +1,563 @@
+#Some useful metainformation
+swagger: '2.0'
+info:
+  title: event-broker API documentation
+  termsOfService: http://swagger.io/terms/
+  description: ''
+  version: '2017-08-10'
+  contact:
+    name: sh20xyqi
+    email: sh20xyqi@studserv.uni-leipzig.de
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+schemes:
+  - http
+
+host: fgseitsrancher.wifa.intern.uni-leipzig.de:8000
+
+basePath: /event-broker
+
+produces:
+  - text/plain
+
+tags:
+  - name: event-broker
+    description: Operations which belong to the set event-broker
+
+#Everything that belongs to event-broker API
+paths:
+  #Everything that belongs to lib
+  #Everything that belongs to lib/api.go
+
+  /rules:
+    get:
+      tags:
+        - event-broker
+      summary:
+        Returns all (global) rulesets.
+      description:
+        ''
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns all rulesets that are accessible to the user.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RuleSet'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to get all rulesets.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+    post:
+      tags:
+        - event-broker
+      summary:
+        Creates new ruleset.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: RuleSet object that needs to be added to the database.
+          required: true
+          schema:
+            $ref: '#/definitions/RuleSet'
+      responses:
+        200:
+          description: Returns 'ok'.
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - JSON decoding failed; Server was not able to load RuleSet into database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /rules/{id}:
+    put:
+      tags:
+        - event-broker
+      summary:
+        Changes or updates RuleSet by id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: RuleSet object that contains information about the change / update.
+          required: true
+          schema:
+            $ref: '#/definitions/RuleSet'
+        - name: id
+          in: path
+          description: Identifies the to be updated RuleSet.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns 'ok'.
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - JSON decoding failed; Server was not able to update / change RuleSet in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+    delete:
+      tags:
+        - event-broker
+      summary:
+        Deletes RuleSet by Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the the to be deleted RuleSet.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Deletes the RuleSet behind the passed ID.
+          schema:
+            $ref: '#/definitions/RuleSet'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to delete RuleSet from database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+    get:
+      tags:
+        - event-broker
+      summary:
+        Return RuleSet by Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the the to be return RuleSet.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the RuleSet behind the passed ID.
+          schema:
+            $ref: '#/definitions/RuleSet'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to return RuleSet from database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /rulesbyserviceid/{id}:
+    get:
+      tags:
+        - event-broker
+      summary:
+        Return RuleSet by service Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the the to be return RuleSets.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the RuleSets behind the passed service ID.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RuleSet'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to return RuleSets from database using a service Id.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deployment:
+    get:
+      tags:
+        - event-broker
+      summary:
+        Returns all deployed RuleSets that are accessible to the user.
+      description:
+        ''
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns all deployed rulesets that are accessible to the user.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeploymentState'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to get all deployed rulesets.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deployment/{processid}:
+    delete:
+      tags:
+        - event-broker
+      summary:
+        Stops all events that are linked to the process behind the passed Id  if the events are not linked to other processes.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: processid
+          in: path
+          description: Identifies the to be used process Id.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns 'ok.'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to stop deployment.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deployment/{ruleid}/{routing}:
+    get:
+      tags:
+        - event-broker
+      summary:
+        Returns DeploymentState of a RuleSet.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: ruleid
+          in: path
+          description: Identifies the to be used RuleSet behind the passed rule Id.
+          required: true
+          type: string
+        - name: routing
+          in: path
+          description: Filters instance(s) using the routing information.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns DeploymentState of a rule behind the passed rule Id and the passed routing information.
+          schema:
+            $ref: '#/definitions/DeploymentState'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to return DeploymentState.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deployment/{ruleid}/{routing}/{processid}/{processevent}:
+    post:
+      tags:
+        - event-broker
+      summary:
+        Creates deployment if it does not already exist.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: ruleid
+          in: path
+          description: Uses the passed rule Id.
+          required: true
+          type: string
+        - name: routing
+          in: path
+          description: Uses the passed routing information.
+          required: true
+          type: string
+        - name: processid
+          in: path
+          description: Uses the passed process Id.
+          required: true
+          type: string
+        - name: processevent
+          in: path
+          description: Uses the passed process event id.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns 'ok'.
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to create Deployment.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /processeventrelations/{event_prefix}:
+    get:
+      tags:
+        - event-broker
+      summary:
+        Get all process event relations for received events.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: event_prefix
+          in: path
+          description: Identifies all process event relations that use the passed event prefix.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns all process event relation Ids. Everything else is not included.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ProcessEventRelation'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to return process event Ids from database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /pool/assignments/{poolid}:
+    get:
+      tags:
+        - event-broker
+      summary:
+        Returns all PoolAssignments behind the passed Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: poolid
+          in: path
+          description: Idenifies the PoolId using the passed Id.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns all FilterPoolAssignments using the passed PoolId.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/FilterPoolAssignment'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to return all PoolAssignments from database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /pool/command/{poolid}/{poolsize}:
+    get:
+      tags:
+        - event-broker
+      summary:
+        Returns a FilterPoolCommand using the passed Pool Id and the passed pool size.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: poolid
+          in: path
+          description: Idenifies the PoolId using the passed Id.
+          required: true
+          type: string
+        - name: poolsize
+          in: path
+          description: Idenifies the pool_size using the passed poolsize.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the FilterPoolCommand using the passed PoolId and pool_size.
+          schema:
+            $ref: '#/definitions/FilterPoolCommand'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Server was not able to return FilterPoolCommand from database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /pool/error/{poolid}/{rule}/{routing}/{err}:
+    get:
+      tags:
+        - event-broker
+      summary:
+        Logs filter pool errors.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: poolid
+          in: path
+          description: Idenifies the PoolId using the passed Id.
+          required: true
+          type: string
+        - name: rule
+          in: path
+          description: Idenifies the rule instance using the passed rule statement.
+          required: true
+          type: string
+        - name: routing
+          in: path
+          description: Idenifies the routing instance using the passed routing statement.
+          required: true
+          type: string
+        - name: err
+          in: path
+          description: Idenifies the error instance using the passed instance statement.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns 'ok'.
+        500:
+          description: ''
+
+#Everything that belongs to definitions:
+definitions:
+  Rule:
+    type: object
+    properties:
+      path:
+        type: string
+        format: string
+      scope:
+        type: string
+        format: string
+      operator:
+        type: string
+        format: string
+      value:
+        type: string
+        format: string
+    required:
+      - path
+      - scope
+      - operator
+      - value
+  RuleSet:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      scope:
+        type: string
+        format: string
+      rules:
+        type: array
+        items:
+          $ref: '#/definitions/Rule'
+      service_id:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+      - scope
+      - rules
+      - service_id
+  ProcessEventRelation:
+    type: object
+    properties:
+      rule_set_id:
+        type: string
+        format: string
+      routing_info:
+        type: string
+        format: string
+      event_prefix:
+        type: string
+        format: string
+      process_event_id:
+        type: string
+        format: string
+      process_id:
+        type: string
+        format: string
+    required:
+      - rule_set_id
+      - routing_info
+      - event_prefix
+      - process_event_id
+      - process_id
+  DeploymentState:
+    type: object
+    properties:
+      rule_id:
+        type: string
+        format: string
+      routing_info:
+        type: string
+        format: string
+      filter_pool:
+        type: string
+        format: string
+      state:
+        type: string
+        format: string
+    required:
+      - rule_id
+      - routing_info
+      - filter_pool
+      - state
+  KnownFilterPool:
+    type: object
+    properties:
+      filter_pool:
+        type: string
+        format: string
+      last_contact:
+        type: integer
+        format: int64
+    required:
+      - filter_pool
+      - last_contact
+  FilterPoolCommand:
+    type: object
+    properties:
+      Command:
+        type: string
+        format: string
+      Assignment:
+        type: array
+        items:
+          $ref: '#/definitions/FilterPoolAssignment'
+    required:
+      - Command
+      - Assignment
+  FilterPoolAssignment:
+    type: object
+    properties:
+      rule_id:
+        type: string
+        format: string
+      routing_info:
+        type: string
+        format: string
+    required:
+      - rule_id
+      - routing_info
+  ErrorMessage:
+    type: object
+    properties:
+      status_code:
+        type: integer
+        format: int32
+      message:
+        type: string
+        format: string
+      error_code:
+        type: string
+        format: string
+      detail:
+        type: array
+        items:
+          type: string
+    required:
+      - status_code
+      - message
+      - error_code
+      - detail

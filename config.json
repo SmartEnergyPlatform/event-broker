@@ -1,0 +1,11 @@
+{
+  "ServerPort" : "8080",
+  "LogLevel" : "CALL",
+  "MongoUrl": "mongodb://mongo",
+  "MongoTable": "events",
+  "MongoDeploymentCollection": "filter",
+  "MongoFilterPoolCollection": "filter_pool",
+  "DefaultKafkaTopic":"eventfilter",
+  "DecodeUrlFix": "false",
+  "SwaggerLocation": "swagger.yaml"
+}
