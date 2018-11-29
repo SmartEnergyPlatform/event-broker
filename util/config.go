@@ -40,6 +40,11 @@ type ConfigStruct struct {
 	SwaggerLocation string
 
 	DecodeUrlFix string
+
+	AmqpUrl					string
+	AmqpReconnectTimeout    int64
+	AmqpConsumerName		string
+	AmqpDeploymentTopic		string
 }
 
 type ConfigType *ConfigStruct

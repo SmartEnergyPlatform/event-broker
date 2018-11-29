@@ -1,3 +1,5 @@
+github.com/SmartEnergyPlatform/amqp-wrapper-lib v0.0.0-20181018071408-32e07d9d89bb h1:wkigEsq8SRUzIbsA5gAWhZ7a1CECn1vnhpElcoA6evE=
+github.com/SmartEnergyPlatform/amqp-wrapper-lib v0.0.0-20181018071408-32e07d9d89bb/go.mod h1:X1U6gbRInWfBsFKgb/owoLNZp2NSx6vLnUPbw6bjEN4=
 github.com/SmartEnergyPlatform/util v0.0.0-20181018070938-b26ca656886c h1:W4cI5yY8t8yL2eby9p27KmVgUzJ8x/nOJVFcchA0srs=
 github.com/SmartEnergyPlatform/util v0.0.0-20181018070938-b26ca656886c/go.mod h1:SQukrczVRI7mSlfxYiIjtKjuIpNc7GPXhZISX0iLa3M=
 github.com/julienschmidt/httprouter v0.0.0-20170430222011-975b5c4c7c21/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
@@ -7,6 +9,8 @@ github.com/moul/http2curl v0.0.0-20161031194548-4e24498b31db/go.mod h1:8UbvGypXm
 github.com/parnurzeal/gorequest v0.0.0-20170429061244-5bf13be19878/go.mod h1:3Kh2QUMJoqw3icWAecsyzkpY7UzRfDhbRdTjtNwNiUE=
 github.com/pkg/errors v0.0.0-20170316201538-ff09b135c25a/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/satori/go.uuid v0.0.0-20170321230731-5bf94b69c6b6/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdhQKdks0=
+github.com/streadway/amqp v0.0.0-20181107104731-27835f1a64e9 h1:xBuwuVDG/vbGv1b0Dn/06flcq0R6MITax8244EZYaKE=
+github.com/streadway/amqp v0.0.0-20181107104731-27835f1a64e9/go.mod h1:1WNBiOZtZQLpVAyu0iTduoJL9hEsMloAK5XWrtW0xdY=
 golang.org/x/net v0.0.0-20170424220842-da118f7b8e59/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 gopkg.in/mgo.v2 v2.0.0-20160818020120-3f83fa500528 h1:/saqWwm73dLmuzbNhe92F0QsZ/KiFND+esHco2v1hiY=
 gopkg.in/mgo.v2 v2.0.0-20160818020120-3f83fa500528/go.mod h1:yeKp02qBN3iKW1OzL3MGk2IdtZzaj7SFntXj72NppTA=

@@ -35,12 +35,9 @@ func main() {
 	//check db connection
 	lib.GetDb().Close()
 
-	//use func (*Session) FsyncLock to lock other eventmanager instances
-	//use sync.mutex to lock api
-	//use db to determine which eventmanager instance should be responsible for cleanup
-	//remove dead filterpools
-	//finished delete processes which where interupted by errors (delete deployments without relations; delete relations without rules; pause normal mongo while cleanup)
-	//lib.StartPeriodicDbCleanup() //TODO
+	lib.InitEventSourcing()
+
+	defer lib.CloseEventSourcing()
 
 	lib.ApiStart()
 

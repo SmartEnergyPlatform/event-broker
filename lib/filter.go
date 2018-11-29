@@ -18,8 +18,8 @@ package lib
 
 import (
 	"github.com/SmartEnergyPlatform/event-broker/util"
-
 	"gopkg.in/mgo.v2/bson"
+	"log"
 )
 
 func StopFilter(processId string) (err error) {
@@ -40,6 +40,21 @@ func CreateFilter(processid string, filterid string, filter Filter) (err error) 
 		return err
 	}
 	return collection.Insert(FilterDeployment{FilterPool: pool, Filter: filter, FilterId: filterid, ProcessId: processid, State: DEPLOYMENT_STARTING})
+}
+
+func SetFilter(processid string, filterid string, filter Filter) (err error) {
+	log.Println("DEBUG: SetFilter()", FilterDeployment{Filter: filter, FilterId: filterid, ProcessId: processid, State: DEPLOYMENT_STARTING} )
+	if filter.Topic == "" {
+		filter.Topic = createFilterTopic(filter)
+	}
+	session, collection := getMongoFilterCollection()
+	defer session.Close()
+	pool, err := selectFilterPool()
+	if err != nil {
+		return err
+	}
+	_, err = collection.Upsert(FilterDeployment{ProcessId: processid}, FilterDeployment{FilterPool: pool, Filter: filter, FilterId: filterid, ProcessId: processid, State: DEPLOYMENT_STARTING})
+	return err
 }
 
 func createFilterTopic(filter Filter) string {

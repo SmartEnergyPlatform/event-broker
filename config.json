@@ -7,5 +7,10 @@
   "MongoFilterPoolCollection": "filter_pool",
   "DefaultKafkaTopic":"eventfilter",
   "DecodeUrlFix": "false",
-  "SwaggerLocation": "swagger.yaml"
+  "SwaggerLocation": "swagger.yaml",
+
+  "AmqpUrl": "amqp://guest:guest@rabbitmq:5672/",
+  "AmqpReconnectTimeout": 10,
+  "AmqpConsumerName": "event_broker",
+  "AmqpDeploymentTopic": "deployment"
 }
