@@ -41,7 +41,7 @@ PUT
 	2. process exists
 */
 
-func Test(t *testing.T) {
+func TestIdempotency(t *testing.T) {
 	closer, mongoport, _, err := testHelper_getMongoDependency()
 	defer closer()
 	if err != nil {

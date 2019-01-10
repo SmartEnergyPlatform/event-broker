@@ -56,31 +56,31 @@ func InitEventSourcing()(err error){
 	if err != nil {
 		return err
 	}
-
 	//event delete
-	err = amqp.Consume(util.Config.AmqpConsumerName + "_" +util.Config.AmqpDeploymentTopic, util.Config.AmqpDeploymentTopic, func(delivery []byte) error {
-		command := DeploymentCommand{}
-		err = json.Unmarshal(delivery, &command)
-		if err != nil {
-			log.Println("ERROR: unable to parse amqp event as json \n", err, "\n --> ignore event \n", string(delivery))
-			return nil
-		}
-		log.Println("amqp receive ", string(delivery))
-		switch command.Command {
-		case "POST":
-			log.Println("WARNING: deprecated event type", command)
-			return nil
-		case "PUT":
-			return handleDeploymentEventsUpdate(command)
-		case "DELETE":
-			return handleDeploymentEventsDelete(command)
-		default:
-			log.Println("WARNING: unknown event type", string(delivery))
-			return nil
-		}
-	})
-
+	err = amqp.Consume(util.Config.AmqpConsumerName + "_" +util.Config.AmqpDeploymentTopic, util.Config.AmqpDeploymentTopic, amqpEventHandling)
 	return err
+}
+
+func amqpEventHandling(delivery []byte) (err error) {
+	command := DeploymentCommand{}
+	err = json.Unmarshal(delivery, &command)
+	if err != nil {
+		log.Println("ERROR: unable to parse amqp event as json \n", err, "\n --> ignore event \n", string(delivery))
+		return nil
+	}
+	log.Println("amqp receive ", string(delivery), "\n", command.Deployment.Process.MsgEvents, "\n", command.Deployment.Process.ReceiveTasks)
+	switch command.Command {
+	case "POST":
+		log.Println("WARNING: deprecated event type", command)
+		return nil
+	case "PUT":
+		return handleDeploymentEventsUpdate(command)
+	case "DELETE":
+		return handleDeploymentEventsDelete(command)
+	default:
+		log.Println("WARNING: unknown event type", string(delivery))
+		return nil
+	}
 }
 
 func handleDeploymentEventsDelete(command DeploymentCommand) error {
@@ -99,7 +99,6 @@ func CloseEventSourcing(){
 func deployEvents(events []MsgEvent, processid string) (err error) {
 	//log.Println("DEBUG: deployEvents() ", events)
 	for _, event := range events {
-		log.Println("DEBUG: deployEvents().loop ", err)
 		err = SetFilter(processid, event.FilterId, event.Filter)
 		if err != nil {
 			log.Println("ERROR: unable to set filter ", err)
