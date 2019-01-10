@@ -43,15 +43,15 @@ func CreateFilter(processid string, filterid string, filter Filter) (err error) 
 }
 
 func SetFilter(processid string, filterid string, filter Filter) (err error) {
+	if filter.Topic == "" {
+		filter.Topic = createFilterTopic(filter)
+	}
 	pool, err := selectFilterPool()
 	if err != nil {
 		return err
 	}
 	filterDepl := FilterDeployment{FilterPool: pool, Filter: filter, FilterId: filterid, ProcessId: processid, State: DEPLOYMENT_STARTING}
 	log.Println("DEBUG: SetFilter()", filterDepl)
-	if filter.Topic == "" {
-		filter.Topic = createFilterTopic(filter)
-	}
 	session, collection := getMongoFilterCollection()
 	defer session.Close()
 	_, err = collection.Upsert(FilterDeployment{ProcessId: processid, FilterId:filterid}, filterDepl)
