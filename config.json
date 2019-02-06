@@ -5,7 +5,6 @@
   "MongoTable": "events",
   "MongoDeploymentCollection": "filter",
   "MongoFilterPoolCollection": "filter_pool",
-  "DefaultKafkaTopic":"eventfilter",
   "DecodeUrlFix": "false",
   "SwaggerLocation": "swagger.yaml",
 

@@ -17,7 +17,6 @@
 package lib
 
 import (
-	"github.com/SmartEnergyPlatform/event-broker/util"
 	"gopkg.in/mgo.v2/bson"
 	"log"
 )
@@ -30,9 +29,6 @@ func StopFilter(processId string) (err error) {
 }
 
 func CreateFilter(processid string, filterid string, filter Filter) (err error) {
-	if filter.Topic == "" {
-		filter.Topic = createFilterTopic(filter)
-	}
 	session, collection := getMongoFilterCollection()
 	defer session.Close()
 	pool, err := selectFilterPool()
@@ -43,9 +39,6 @@ func CreateFilter(processid string, filterid string, filter Filter) (err error) 
 }
 
 func SetFilter(processid string, filterid string, filter Filter) (err error) {
-	if filter.Topic == "" {
-		filter.Topic = createFilterTopic(filter)
-	}
 	pool, err := selectFilterPool()
 	if err != nil {
 		return err
@@ -56,10 +49,6 @@ func SetFilter(processid string, filterid string, filter Filter) (err error) {
 	defer session.Close()
 	_, err = collection.Upsert(FilterDeployment{ProcessId: processid, FilterId:filterid}, filterDepl)
 	return err
-}
-
-func createFilterTopic(filter Filter) string {
-	return util.Config.DefaultKafkaTopic //strings.Replace(filter.ServiceId, "#", "_", -1)
 }
 
 func GetAllFilter() (result []FilterDeployment, err error) {

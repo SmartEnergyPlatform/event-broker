@@ -35,8 +35,6 @@ type ConfigStruct struct {
 	MongoDeploymentCollection string
 	MongoFilterPoolCollection string
 
-	DefaultKafkaTopic string
-
 	SwaggerLocation string
 
 	DecodeUrlFix string
