@@ -86,7 +86,7 @@ func TestIdempotency(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	if len(filter) != 1 || filter[0].ProcessId != "1" || filter[0].FilterId != "f1" {
+	if len(filter) != 1 || filter[0].ProcessId != "1" || filter[0].Filter.Topic != "f1" {
 		t.Error("unexpected result:", filter)
 		return
 	}
@@ -108,7 +108,7 @@ func TestIdempotency(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	if len(filter) != 1 || filter[0].ProcessId != "1" || filter[0].FilterId != "f2" {
+	if len(filter) != 1 || filter[0].ProcessId != "1" || filter[0].Filter.Topic != "f2" {
 		t.Error("unexpected result:", filter)
 		return
 	}
@@ -213,7 +213,7 @@ func testHelper_getMongoDependency() (closer func(), hostPort string, ipAddress 
 	return func() { mongo.Close() }, hostPort, mongo.Container.NetworkSettings.IPAddress, err
 }
 
-func testHelper_putProcess(vid string, filterId string) error {
+func testHelper_putProcess(vid string, topic string) error {
 	return handleDeploymentEventsUpdate(DeploymentCommand{
 		Id:            vid,
 		Command:       "PUT",
@@ -221,7 +221,8 @@ func testHelper_putProcess(vid string, filterId string) error {
 			Process:AbstractProcess{
 				MsgEvents: []MsgEvent{
 					{
-						FilterId:filterId,
+						FilterId:"1",
+						Filter:Filter{Topic:topic},
 					},
 				},
 			},
